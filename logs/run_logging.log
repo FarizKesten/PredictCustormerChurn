@@ -1,0 +1,13 @@
+INFO:<churn_library>:importing data from ./data/bank_data.csv...
+INFO:<churn_library>:saving eda plots..
+INFO:<churn_library>:saving plot to images/eda/churn_histogram.png
+INFO:<churn_library>:saving plot to images/eda/customer_age_histogram.png
+INFO:<churn_library>:saving plot to images/eda/marital_status.png
+INFO:<churn_library>:saving plot to images/eda/total_trans_density.png
+INFO:<churn_library>:saving plot to images/eda/correlation_heatmap.png
+INFO:<churn_library>:running grid-search for Random Forest Classifier..
+INFO:<churn_library>:saving figure to ./images/results/random_forest_results.png
+INFO:<churn_library>:saving figure to ./images/results/logistic_results.png
+INFO:<churn_library>:saving feature importance to ./images/results/
+INFO:<churn_library>:saving RFC classifier in ./models/rfc_model.pkl
+INFO:<churn_library>:saving LRC classifier in ./models/logistic_model.pkl

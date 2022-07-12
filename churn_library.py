@@ -1,7 +1,10 @@
 '''
 Demo of predicting customer churn
+Author: Fariz Kesten
+Date: 12.07.2022
 '''
 import logging
+import logging.config
 import os
 from sklearn.metrics import plot_roc_curve, classification_report
 from sklearn.model_selection import GridSearchCV
@@ -18,11 +21,11 @@ sns.set()
 
 
 os.environ['QT_QPA_PLATFORM'] = 'offscreen'
-logging.basicConfig(
-    filename='./logs/logging.log',
-    encoding='utf-8',
-    level=logging.DEBUG)
-
+logging.config.dictConfig({
+	'version': 1,
+	'disable_existing_loggers': True
+})
+logger = logging.getLogger("<churn_library>")
 
 def import_data(pth):
     '''
@@ -34,12 +37,13 @@ def import_data(pth):
             data: pandas dataframe
     '''
     try:
+        logger.info("importing data from %s...", pth)
         data = pd.read_csv(pth)
         data['Churn'] = data['Attrition_Flag'].apply(lambda val: 0
                                                      if val == "Existing Customer" else 1)
         return data
     except FileNotFoundError:
-        logging.error('%s cannot be read', pth)
+        logger.error('%s cannot be read', pth)
 
 
 def perform_eda(data):
@@ -52,6 +56,7 @@ def perform_eda(data):
             None
     '''
 
+    logger.info("saving eda plots..")
     save_plot(data['Churn'].hist(),
               "images/eda/churn_histogram.png")
     save_plot(data['Customer_Age'].hist(),
@@ -83,9 +88,10 @@ def save_plot(axes, pth, width=20, height=10):
     axes.figure.set_figheight(height)
     axes.figure.set_figwidth(width)
     try:
+        logger.info("saving plot to %s", pth)
         axes.figure.savefig(pth)
     except PermissionError:
-        logging.error('cannot save figure at %s', pth)
+        logger.error('cannot save figure at %s', pth)
 
     axes.cla()  # clear buffer after saving
 
@@ -190,6 +196,7 @@ def classification_report_image(y_train,
         '''
         save & plot report
         '''
+        logger.info("saving figure to %s", file_name)
         plt.rc('figure', figsize=(5, 5))
         plt.text(0.01, 1.25, str(name), {
             'fontsize': 10}, fontproperties='monospace')
@@ -248,6 +255,7 @@ def feature_importance_plot(model, x_data, output_pth):
     plt.bar(range(x_data.shape[1]), importances[indices])
     plt.xticks(range(x_data.shape[1]), names, rotation=90)
 
+    logger.info("saving feature importance to %s", output_pth)
     plt.savefig(os.path.join(output_pth, "feature_importance.png"))
     plt.cla()
 
@@ -273,6 +281,7 @@ def train_models(x_train, x_test, y_train, y_test):
         'max_depth': [4, 5, 100],
         'criterion': ['gini', 'entropy']
     }
+    logger.info("running grid-search for Random Forest Classifier..")
     cv_rfc = GridSearchCV(estimator=rfc, param_grid=param_grid, cv=5)
     cv_rfc.fit(x_train, y_train)
 
@@ -300,11 +309,18 @@ def train_models(x_train, x_test, y_train, y_test):
     feature_importance_plot(cv_rfc, x_test, './images/results/')
 
     # save best model
+    logger.info("saving RFC classifier in ./models/rfc_model.pkl")
     joblib.dump(cv_rfc.best_estimator_, './models/rfc_model.pkl')
+    logger.info("saving LRC classifier in ./models/logistic_model.pkl")
     joblib.dump(lrc, './models/logistic_model.pkl')
 
 
 if __name__ == "__main__":
+    logging.basicConfig(
+        filename='./logs/run_logging.log',
+        encoding='utf-8',
+        level=logging.DEBUG)
+
     bank_df = import_data(r"./data/bank_data.csv")
     perform_eda(bank_df)
 

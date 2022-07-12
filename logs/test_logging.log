@@ -1,0 +1,12 @@
+INFO:<churn_script_logging_and_tests>:Testing import_data: SUCCESS
+INFO:<churn_script_logging_and_tests>:Testing perform_eda: SUCCESS
+INFO:<churn_script_logging_and_tests>:Testing perfom_eda: churn_histogram.png was found
+INFO:<churn_script_logging_and_tests>:Testing perfom_eda: customer_age_histogram.png was found
+INFO:<churn_script_logging_and_tests>:Testing perfom_eda: marital_status.png was found
+INFO:<churn_script_logging_and_tests>:Testing perfom_eda: total_trans_density.png was found
+INFO:<churn_script_logging_and_tests>:Testing encoder_helper: SUCCESS
+INFO:<churn_script_logging_and_tests>:Testing perform_feature_engineering: SUCCESS
+INFO:<churn_script_logging_and_tests>:Testing train_models: roc.png was found
+INFO:<churn_script_logging_and_tests>:Testing train_models: rfc_model.pkl was found
+INFO:<churn_script_logging_and_tests>:Testing train_models: logistic_model.pkl was found
+INFO:<churn_script_logging_and_tests>:Testing train_models: SUCCESS
